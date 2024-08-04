@@ -1,0 +1,30 @@
+
+.carousel-item img{
+    max-height: 500px;
+    max-width: 900px;
+    margin: auto;
+}
+.slide{
+    max-width: 900px;
+    margin: auto;
+}
+.img img{
+    max-height: 500px;
+}
+.img p{
+    position: absolute;
+    font-size: 5vw;
+    font-style: bold;
+    word-wrap: break-word;
+    text-align: center;
+    color: white;
+    line-height: 1.2;
+    font-family: 'Times New Roman', Times, serif;
+    margin-top: 200px;
+}
+.image1{
+    border-radius: 0;
+}
+.slider-img{
+    border-radius: 0;
+}
