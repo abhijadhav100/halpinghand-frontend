@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import '../Styles/Dashboard.css';
 
 export default function Dashboard() {
 
@@ -13,7 +14,7 @@ export default function Dashboard() {
 
 
   return (
-    <div className="container mt-5">
+    <div className="container tablecont mt-5">
        <table className="table">
           <thead>
             <tr>
