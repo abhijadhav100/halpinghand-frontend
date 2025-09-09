@@ -1,23 +1,25 @@
 import React from "react";
+import axios from 'axios';
 import { useState ,useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import '../Styles/Signin.css';
 
 export default function Signup() {
 
-  const name = React.useRef(null);
+  const trustname = React.useRef(null);
   const email = React.useRef(null);
-  const mobile = React.useRef(null);
+  const contact = React.useRef(null);
   const password = React.useRef(null);
   // const conpassword = React.useRef(null);
 
   const [userForm, setUserForm] = useState({
-    name: "",
+    trustname: "",
     email: "",
-    mobile:"",
+    contact:"",
     password: ""
   });
   
+
   const [conpassword, setConpassword] = useState('');
   const [nameMess ,setNameMess] = useState('');
   const [emailMess ,setEmailMess] = useState('');
@@ -28,6 +30,7 @@ export default function Signup() {
   const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
   const passRegex = /^(?:([A-Z])*([a-z])*(\d)*(\W)*){8,12}$/;
   const mobRegex = /^([0|\+[0-9]{1,5})?([7-9][0-9]{9})$/;
+
 
   const handleChange = (e) => {
     console.log(e.target.name, e.target.value);
@@ -51,29 +54,30 @@ export default function Signup() {
         alert("Password does not match!")
       }
     else{
-    const response = await fetch("http://localhost:5000/api", {
-      method: "POST",
-      body: JSON.stringify(userForm),
-      headers: {
-        "Content-Type": "application/json",
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/trustdata/', userForm, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log('Data posted successfully:', response.data);
+        alert('Register Successfully, Login your account!');
+        setUserForm({ trustname: "", email: "", contact:"", password: "", conpassword: "" });
+        navigate('/signin')
+      } catch (error) {
+        console.error('Error posting data:', error.response.data); // Improved error logging
       }
-    });
-    const resData = await response.text();
-    console.log(resData);
-    alert('Register Successfully, Login your account!');
-    setUserForm({ name: "", email: "", mobile:"", password: "", conpassword: "" });
-    navigate('/signin')
+    }
    }
-  }
 
   useEffect(()=>{
-     if(nameRegex.test(userForm.name)){
+     if(nameRegex.test(userForm.trustname)){
        setNameMess('')
      }
      else{
        setNameMess('Name required only a-z or A-Z characters!')
      }
-  },[userForm.name])
+  },[userForm.trustname])
 
   useEffect(()=>{
     if(userForm.email==="" || emailRegex.test(userForm.email)){
@@ -95,13 +99,13 @@ export default function Signup() {
   },[userForm.password])
 
   useEffect(()=>{
-    if(userForm.mobile==="" || mobRegex.test(userForm.mobile)){
+    if(userForm.contact==="" || mobRegex.test(userForm.contact)){
       setMobileMess('')
     }
     else{
       setMobileMess('Mobile no should be 10 digits only')
     }
-  },[userForm.mobile])
+  },[userForm.contact])
 
   return (
     <div>
@@ -113,10 +117,10 @@ export default function Signup() {
           <input
             type="text"
             onChange={handleChange}
-            name="name"
-            value={userForm.name}
+            name="trustname"
+            value={userForm.trustname}
             placeholder="Trust Name"
-            ref={name}
+            ref={trustname}
           />
           {nameMess && <p style={{color:'red'}}>{nameMess}</p>}
         </div>
@@ -135,10 +139,10 @@ export default function Signup() {
           <input
             type="mobile"
             onChange={handleChange}
-            name="mobile"
-            value={userForm.mobile}
+            name="contact"
+            value={userForm.contact}
             placeholder="Contact"
-            ref={mobile}
+            ref={contact}
           />
           {mobileMess && <p style={{color:'red'}}>{mobileMess}</p>}
         </div>

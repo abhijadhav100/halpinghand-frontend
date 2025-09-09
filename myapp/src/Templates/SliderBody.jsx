@@ -7,7 +7,8 @@ import img4 from '../Images/image4.jpg';
 import img6 from '../Images/image8.jpg';
 import img7 from '../Images/image7.jpg';
 import '../Styles/SliderBody.css';
-import ExploreTrust from './ExploreTrust';
+import ExploreOrg from './ExploreOrg';
+import ExploreTrusts from './ExploreTrusts';
 
 export default function SliderBody() {
   return (
@@ -48,7 +49,8 @@ export default function SliderBody() {
         <img src={img5} className="image1 d-block w-100" alt="" />
       </div>
     </div>
-    <ExploreTrust/>
+    <ExploreOrg/>
+    <ExploreTrusts/>
   </>
   )
 }

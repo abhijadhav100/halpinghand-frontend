@@ -4,13 +4,13 @@ import axios from 'axios';
 
 export default function Donate() {
 
-  const dname = React.useRef(null);
-  const address = React.useRef(null);
-  const mobile = React.useRef(null);
-  const dtype = React.useRef(null);
+  const donarname = React.useRef(null);
+  const donaraddress = React.useRef(null);
+  const donarcontact = React.useRef(null);
+  const donationtype = React.useRef(null);
   const message = React.useRef(null);
 
-  const [donarForm, setDonarForm] = useState({dname:"",address:"",mobile:"",dtype:"",message:""})
+  const [donarForm, setDonarForm] = useState({donarname:"",donaraddress:"",donarcontact:"",donationtype:"",message:""})
 
   const handleChange =(e)=>{
     console.log(e.target.value)
@@ -19,13 +19,23 @@ export default function Donate() {
 
   const handleSubmit = async(e)=>{
     e.preventDefault();
-    if(donarForm.dname==="" || donarForm.address==="" || donarForm.mobile==="" || donarForm.dtype==="" || donarForm.message===""){
+    if(donarForm.donarname==="" || donarForm.donaraddress==="" || donarForm.donarcontact==="" || donarForm.donationtype==="" || donarForm.message===""){
       alert("Please enter donar details!")
     }
     else{
-      const response = await axios.post('http://localhost:5000/api/donardata',donarForm);
-      alert(response.data)
-      setDonarForm({dname:"",address:"",mobile:"",dtype:"",message:""})
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/donardata/', donarForm, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        console.log('Data posted successfully:', response.data);
+        alert('Data send Successfully');
+        setDonarForm({donarname:"",donaraddress:"",donarcontact:"",donationtype:"",message:""})
+      } catch (error) {
+        console.error('Error posting data:', error.response.data); // Improved error logging
+      }
+      
     }
     }
     
@@ -45,21 +55,44 @@ export default function Donate() {
     <form className="form donate-form mt-0">
     
         <label>
-            <input className="input" type="text" name="dname" value={donarForm.dname} onChange={handleChange} required="" ref={dname}/>
+            <input className="input" type="text" name="donarname" value={donarForm.donarname} onChange={handleChange} required="" ref={donarname}/>
             <span>Full Name</span>
         </label>
             
     <label>
-        <input className="input" type="text" name="address" value={donarForm.address} onChange={handleChange}  required="" ref={address}/>
+        <input className="input" type="text" name="donaraddress" value={donarForm.donaraddress} onChange={handleChange}  required="" ref={donaraddress}/>
         <span>Current Address</span>
     </label> 
         
     <label>
-        <input className="input" name="mobile" value={donarForm.mobile} onChange={handleChange} type="tel" required="" ref={mobile}/>
+        <input className="input" name="donarcontact" value={donarForm.donarcontact} onChange={handleChange} type="tel" required="" ref={donarcontact}/>
         <span>Contact Number</span>
     </label>
+    <button
+        type="button"
+        className="otp-btn"
+    >
+        Send OTP
+    </button>
+        <label> 
+            <input
+                className="input"
+                name="otp"
+                type="number"
+                required=""
+            />
+            <span>Enter OTP</span>
+        </label>
+
+    <button
+        type="button"
+       
+        className="otp-btn"
+    >
+        Verify OTP
+    </button>
      <div class="select">
-      <select name="dtype" value={donarForm.dtype} onChange={handleChange} className='select-options' ref={dtype}>
+      <select name="donationtype" value={donarForm.donationtype} onChange={handleChange} className='select-options' ref={donationtype}>
          <option value="" disabled selected>-----What you can donate-----</option>
          <option value="Foods">Food</option>
          <option value="Cloths">Cloths</option>

@@ -2,7 +2,7 @@ import React from 'react'
 import { Link ,useNavigate} from 'react-router-dom'
 import { useEffect } from 'react';
 import '../Styles/Navbar.css';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../Context/AuthContext';
 
 
 export default function Navbar() {
@@ -13,7 +13,8 @@ export default function Navbar() {
 
   const handleLogout = async (e)=>{
     e.preventDefault();
-     logout(navigate);
+    localStorage.removeItem('user');
+    logout(navigate);
   }
 
   useEffect(() => {
@@ -56,6 +57,9 @@ export default function Navbar() {
            <li className="nav-item mx-lg-3">
              <Link className="nav-link" aria-current="page" to="/dashboard">Dashboard</Link>
           </li>
+          <li className="nav-item mx-lg-3">
+             <Link className="nav-link" aria-current="page" to="/donarsdetails">Donars Details</Link>
+          </li>
           </>
         ):(
           <>
@@ -67,6 +71,9 @@ export default function Navbar() {
         </li>
         <li className="nav-item mx-lg-3">
           <Link className="nav-link" to="/donate">Donate</Link>
+        </li>
+        <li className="nav-item mx-lg-3">
+          <Link className="nav-link" to="/contact">Contact</Link>
         </li>
         </>
         )}

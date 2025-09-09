@@ -1,82 +1,61 @@
 import React from 'react'
 import {Link, useNavigate} from 'react-router-dom';
 import { useState } from 'react';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '../Context/AuthContext';
 import '../Styles/Signin.css';
 import axios from 'axios';
 export default function Signin() {
 
     const { login } = useAuth();
-    // const [loginForm, setLoginForm] = useState({email:"",password:""});
+    const [loginForm, setLoginForm] = useState({email:"",password:""});
 
     const navigate = useNavigate();
 
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    // const [email, setEmail] = useState('');
+    // const [password, setPassword] = useState('');
     // const email = React.useRef(null);
     // const password = React.useRef(null);
 
-    // const handleForm = (e)=>{
-    //     setLoginForm({
-    //         ...loginForm,
-    //         [e.target.name]: e.target.value
-    //     })
-    // }
+    const handleForm = (e)=>{
+        setLoginForm({
+            ...loginForm,
+            [e.target.name]: e.target.value
+        })
+    }
      
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        if(email==="" || password===""){
+        if(loginForm.email==="" || loginForm.password===""){
             alert("Please enter valid details")
-            console.log('fill form')
         }
         else{
-            await axios.post('http://localhost:5000/api/login',{email, password})
-            .then(result=>{
-                console.log(result)
-                if(result.data==="success"){
-                    alert('Login Successful')
-                    login();
-                    navigate('/dashboard')
-                    setEmail('');
-                    setPassword('')
-                }
-                else{
-                    alert(result.data);
-                    
-                }
-            }).catch(err=>{
-                console.log(err)
-            })
-                
-                
-           
-
-    //     // const data = await response.text();
-    //     // console.log(data);
-
-    //     // const request = await fetch('http://localhost:5000/api/login',{
-    //     //     method:'POST',
-    //     //     body: JSON.stringify(form),
-    //     //     headers:{
-    //     //         'Content-Type':'application/json'
-    //     //     }
-    //     // })
-    //     // const data = await request.json();
-    //     // console.log(data)
+                    await axios.post('http://127.0.0.1:8000/login/',loginForm)
+                    .then((res)=>{
+                        login();
+                        localStorage.setItem('user', JSON.stringify(res.data.user));
+                        alert(res.data.message+" Welcome "+res.data.user.trustname)
+                        navigate('/dashboard')
+                        setLoginForm({email:"",password:""})
+                        console.log(res.data)
+                    }).catch ((error)=> {
+                        alert(error.response.data.error)
+                        setLoginForm({email:"",password:""})
+                        console.error('Error posting data:', error.response.data);
+                    });             
         }
     }
     return (
         <div>
-            <div className="container text-center my-2">
+            <div className="container text-center mt-4 mb-0">
                 <p className="fs-1">Trust Login</p>
             </div>
             <form className="form" >
                 <p className="form-title">Login to your account</p>
                 <div className="input-container">
-                    <input type="email" name="email" value={email} onChange={(e)=>setEmail(e.target.value)} placeholder="Enter email"/>
+                    <input type="email" name="email" value={loginForm.email} onChange={handleForm} placeholder="Enter email"/>
                 </div>
                 <div className="input-container">
-                    <input type="password" name="password" value={password} onChange={(e)=>setPassword(e.target.value)} placeholder="Enter password"/>
+                    <input type="password" name="password" value={loginForm.password} onChange={handleForm} placeholder="Enter password"/>
                 </div>
                 <button type="submit" onClick={handleSubmit} className="submit" >
                     Login
